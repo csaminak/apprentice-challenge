@@ -3,6 +3,8 @@ require('chai').should();
 
 let webdriver = require('selenium-webdriver');
 let By = webdriver.By;
+let until = webdriver.until;
+let key = webdriver.Key;
 
 let d = new webdriver.Builder()
 .forBrowser('firefox')
@@ -59,18 +61,14 @@ describe('Social Tables Help Page', function() {
     // Test 2
     describe('Searching for \'Bobby Fisher\'', function() {
         it('should return 0 results', function(done) {
-
-            var form;
             d.findElement(By.id('searchAskForm'))
-                .then(function(_form_) {
-                    form = _form_;
+                .then(function() {
                     return d.findElement(By.id('searchAskInput'));
                 })
                 .then(function(element) {
-                    element.sendKeys('BobbyFisher');
-                    return form.submit();
-                })
-                .then(function() {
+                    element.sendKeys('Bobby Fisher');
+                    element.sendKeys(key.RETURN);
+                    d.wait(until.elementLocated(By.id('results')), 5000);
                     return d.findElements(By.className('article'));
                 })
                 .then(function(results) {
@@ -85,17 +83,14 @@ describe('Social Tables Help Page', function() {
     // Test 3
     describe('Searching for \'event\'', function() {
         it('should return 10 results', function(done) {
-            var form;
             d.findElement(By.id('searchAskForm'))
-                .then(function(_form_) {
-                    form = _form_;
+                .then(function() {
                     return d.findElement(By.id('searchAskInput'));
                 })
                 .then(function(element) {
-                    element.sendKeys('event')
-                    return form.submit();
-                })
-                .then(function() {
+                    element.sendKeys('event');
+                    element.sendKeys(key.RETURN);
+                    d.wait(until.elementLocated(By.id('results')), 5000);
                     return d.findElements(By.className('article'));
                 })
                 .then(function(results) {
@@ -108,17 +103,27 @@ describe('Social Tables Help Page', function() {
     });
 
     // Test 4
-    describe('Searching for a word under three character', function() {
+    describe('Searching for a word under three characters', function() {
         it('should trigger an alert box with the text \'Search string must be at least 3 characters long\'', function(done) {
+            // focus the search box
+            // type 2 letters
+            // search
+            // check for alert
+            // check to see if alert box has string
 
             d.findElement(By.id('searchAskInput'))
-                .then(function(element) {
-                    if(element.sendKeys.length < 3) {
-                        
-                    }
+                .then(function(element){
+                    element.sendKeys('hi');
+                    element.sendKeys(key.RETURN);
+                    var alert = d.switchTo().alert();
+                     return alert.getText();
                 })
+                .then(function(text){
+                    text.should.equal('Search string must be at least 3 characters long');
+                    done();
+                })
+                .catch(error => done(error));
         });
     });
-
 
 });
