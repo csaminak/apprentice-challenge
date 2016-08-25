@@ -37,9 +37,7 @@ describe('Social Tables Help Page', function() {
     // Test 1
     describe('Logo', function() {
         it('should link to https://www.socialtables.com/', function(done) {
-
             var logo;
-
             d.findElement(By.id('logo-grey'))
                 .then(function(element) {
                     logo = element;
@@ -55,7 +53,6 @@ describe('Social Tables Help Page', function() {
                 })
                 .catch(error => done(error));
         });
-
     });
 
     // Test 2
@@ -76,7 +73,6 @@ describe('Social Tables Help Page', function() {
                     done();
                 })
                 .catch(error => done(error));
-
         });
     });
 
@@ -105,12 +101,6 @@ describe('Social Tables Help Page', function() {
     // Test 4
     describe('Searching for a word under three characters', function() {
         it('should trigger an alert box with the text \'Search string must be at least 3 characters long\'', function(done) {
-            // focus the search box
-            // type 2 letters
-            // search
-            // check for alert
-            // check to see if alert box has string
-
             d.findElement(By.id('searchAskInput'))
                 .then(function(element){
                     element.sendKeys('hi');
