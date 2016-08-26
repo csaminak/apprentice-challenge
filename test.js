@@ -15,7 +15,6 @@ after(function(done) {
 });
 
 describe('Social Tables Help Page', function() {
-
     // increase timeout from 2000ms to account for webdriver load
     this.timeout(30000);
 
@@ -32,6 +31,16 @@ describe('Social Tables Help Page', function() {
         .then(title => title.should.equal('Social Tables Help - Home'))
         .then(() => done())
         .catch(error => done(error));
+    });
+
+    // Extra Test
+    it('should have 17 help topics', function(done) {
+        d.findElement(By.className('topic'))
+            .then(function(results) {
+                results.length.should.equal(17);
+                done();
+            })
+            .catch(error => done(error));
     });
 
     // Test 1
